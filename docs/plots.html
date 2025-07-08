@@ -191,7 +191,7 @@ jupyter: python3
 <p>Data er hentet fra Danmarks Statistiks hjemmeside (dst.dk) ved hjælp af web scraping. For hver tilgængelig årgang indsamles de mest populære drenge- og pigenavne sammen med antallet af børn, der har fået disse navne.</p>
 <p><strong>Analysemetode:</strong> - <strong>Tidsperiode:</strong> 1985-2023 - <strong>Periodeopdeling:</strong> 5-års intervaller (f.eks. 1985-1989, 1990-1994, osv.) - <strong>Udvælgelseskriterium:</strong> De 3 mest populære navne per periode baseret på det samlede antal børn i perioden - <strong>Aggregering:</strong> Navne aggregeres på tværs af årene inden for hver periode for at identificere de mest konsistente populære navne</p>
 <p>Denne tilgang giver et klarere billede af navnetendenser over tid ved at reducere årlige udsving og fokusere på navne, der har været populære gennem længere perioder.</p>
-<div id="b879fb87" class="cell" data-execution_count="1">
+<div id="446cacef" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Vis kode</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import nødvendige moduler fra baby_plots.py</span></span>
@@ -224,7 +224,7 @@ jupyter: python3
 <section id="populære-drengenavne" class="level2">
 <h2 class="anchored" data-anchor-id="populære-drengenavne">Populære Drengenavne</h2>
 <p>Følgende graf viser udviklingen i de mest populære drengenavne på tværs af 5-års perioder:</p>
-<div id="389412dd" class="cell" data-execution_count="2">
+<div id="5f6124ab" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Vis kode</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plot_name_trends_plotly(</span>
@@ -237,13 +237,13 @@ jupyter: python3
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>fig.update_layout(</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># width=400,  # Remove fixed width</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># height=400,  # Keep reasonable height</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    height<span class="op">=</span><span class="dv">1000</span>,  <span class="co"># Keep reasonable height</span></span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    autosize<span class="op">=</span><span class="va">True</span>,  <span class="co"># Make responsive</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="920px" height="720" src="iframe_figures/figure_10.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="920px" height="1020" src="iframe_figures/figure_2.html" frameborder="0" allowfullscreen=""></iframe>
 <p>Udvikling i populære drengenavne fra 1985-2023</p>
 </div>
 </div>
@@ -251,34 +251,10 @@ jupyter: python3
 <section id="populære-pigenavne" class="level2">
 <h2 class="anchored" data-anchor-id="populære-pigenavne">Populære Pigenavne</h2>
 <p>Tilsvarende graf for de mest populære pigenavne:</p>
-<div id="9fcea760" class="cell" data-execution_count="3">
+<div id="1c785703" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="920px" height="720" src="iframe_figures/figure_11.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="920px" height="720" src="iframe_figures/figure_3.html" frameborder="0" allowfullscreen=""></iframe>
 <p>Udvikling i populære pigenavne fra 1985-2023</p>
-</div>
-</div>
-<div id="97cd1e39" class="cell" data-execution_count="4">
-<details class="code-fold">
-<summary>Vis kode</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Eksempeldata</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tips <span class="op">=</span> sns.load_dataset(<span class="st">"tips"</span>)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Simpel seaborn-plot: scatterplot af total_bill vs tip</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(data<span class="op">=</span>tips, x<span class="op">=</span><span class="st">"total_bill"</span>, y<span class="op">=</span><span class="st">"tip"</span>, hue<span class="op">=</span><span class="st">"sex"</span>)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Eksempel på Seaborn scatterplot"</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="plots_files/figure-html/cell-5-output-1.png" width="566" height="375" class="figure-img"></p>
-</figure>
-</div>
 </div>
 </div>
 </section>

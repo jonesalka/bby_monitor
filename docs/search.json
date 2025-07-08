@@ -18,14 +18,14 @@
     "href": "plots.html#populære-drengenavne",
     "title": "Baby navne monitor",
     "section": "Populære Drengenavne",
-    "text": "Populære Drengenavne\nFølgende graf viser udviklingen i de mest populære drengenavne på tværs af 5-års perioder:\n\n\nVis kode\nfig = plot_name_trends_plotly(\n    Drengenavne,\n    \"Drenge\",\n    highlight_names=pop_drenge[\"Navn\"].unique(),\n    colormap=diverging_colormap,\n)\n\n\nfig.update_layout(\n    # width=400,  # Remove fixed width\n    # height=400,  # Keep reasonable height\n    autosize=True,  # Make responsive\n)\nfig.show()\n\n\n\nUdvikling i populære drengenavne fra 1985-2023"
+    "text": "Populære Drengenavne\nFølgende graf viser udviklingen i de mest populære drengenavne på tværs af 5-års perioder:\n\n\nVis kode\nfig = plot_name_trends_plotly(\n    Drengenavne,\n    \"Drenge\",\n    highlight_names=pop_drenge[\"Navn\"].unique(),\n    colormap=diverging_colormap,\n)\n\n\nfig.update_layout(\n    # width=400,  # Remove fixed width\n    height=1000,  # Keep reasonable height\n    autosize=True,  # Make responsive\n)\nfig.show()\n\n\n\nUdvikling i populære drengenavne fra 1985-2023"
   },
   {
     "objectID": "plots.html#populære-pigenavne",
     "href": "plots.html#populære-pigenavne",
     "title": "Baby navne monitor",
     "section": "Populære Pigenavne",
-    "text": "Populære Pigenavne\nTilsvarende graf for de mest populære pigenavne:\n\n\n\nUdvikling i populære pigenavne fra 1985-2023\n\n\n\n\nVis kode\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\n# Eksempeldata\ntips = sns.load_dataset(\"tips\")\n\n# Simpel seaborn-plot: scatterplot af total_bill vs tip\nplt.figure(figsize=(6, 4))\nsns.scatterplot(data=tips, x=\"total_bill\", y=\"tip\", hue=\"sex\")\nplt.title(\"Eksempel på Seaborn scatterplot\")\nplt.tight_layout()\nplt.show()"
+    "text": "Populære Pigenavne\nTilsvarende graf for de mest populære pigenavne:\n\n\n\nUdvikling i populære pigenavne fra 1985-2023"
   },
   {
     "objectID": "plots.html#konklusion",
