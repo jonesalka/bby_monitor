@@ -404,6 +404,7 @@ def plot_name_trends_plotly(df, gender, highlight_names=None, colormap=None):
                 x=name_df["År"],
                 y=name_df["Antal"],
                 mode="lines",
+                name=name,
                 line=dict(width=0, color=color),
                 fill="tozeroy",
                 showlegend=False,
@@ -412,6 +413,7 @@ def plot_name_trends_plotly(df, gender, highlight_names=None, colormap=None):
                     if color
                     else None
                 ),
+                hoverinfo="x+y+name",
             )
         )
 
