@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "plots.html",
+    "href": "plots.html",
+    "title": "Baby navne monitor",
+    "section": "",
+    "text": "Disse visualiseringer viser udviklingen i de mest populære babynavne i Danmark baseret på data fra Danmarks Statistik. Analysemetoden fokuserer på at identificere de 3 mest populære navne inden for 5-års perioder, startende fra 1985.\n\n\nData er hentet fra Danmarks Statistiks hjemmeside (dst.dk) ved hjælp af web scraping. For hver tilgængelig årgang indsamles de mest populære drenge- og pigenavne sammen med antallet af børn, der har fået disse navne.\nAnalysemetode: - Tidsperiode: 1985-2023 - Periodeopdeling: 5-års intervaller (f.eks. 1985-1989, 1990-1994, osv.) - Udvælgelseskriterium: De 3 mest populære navne per periode baseret på det samlede antal børn i perioden - Aggregering: Navne aggregeres på tværs af årene inden for hver periode for at identificere de mest konsistente populære navne\nDenne tilgang giver et klarere billede af navnetendenser over tid ved at reducere årlige udsving og fokusere på navne, der har været populære gennem længere perioder.\n\n\nVis kode\n# Import nødvendige moduler fra baby_plots.py\nimport sys\nimport importlib\n\nsys.path.insert(1, \"src\")\nimport baby_plots\n\nimportlib.reload(baby_plots)\nfrom baby_plots import (\n    plot_name_trends_plotly,\n    load_navne_data,\n    most_popular_by_period,\n    diverging_colormap,\n)\n\nDrengenavne, Pigenavne = load_navne_data()\nperiod = 5\ntop_x = 4\npop_piger = most_popular_by_period(Pigenavne, top_x=top_x, period=period)\npop_drenge = most_popular_by_period(Drengenavne, top_x=top_x, period=period)"
+  },
+  {
+    "objectID": "plots.html#introduktion",
+    "href": "plots.html#introduktion",
+    "title": "Baby navne monitor",
+    "section": "",
+    "text": "Disse visualiseringer viser udviklingen i de mest populære babynavne i Danmark baseret på data fra Danmarks Statistik. Analysemetoden fokuserer på at identificere de 3 mest populære navne inden for 5-års perioder, startende fra 1985.\n\n\nData er hentet fra Danmarks Statistiks hjemmeside (dst.dk) ved hjælp af web scraping. For hver tilgængelig årgang indsamles de mest populære drenge- og pigenavne sammen med antallet af børn, der har fået disse navne.\nAnalysemetode: - Tidsperiode: 1985-2023 - Periodeopdeling: 5-års intervaller (f.eks. 1985-1989, 1990-1994, osv.) - Udvælgelseskriterium: De 3 mest populære navne per periode baseret på det samlede antal børn i perioden - Aggregering: Navne aggregeres på tværs af årene inden for hver periode for at identificere de mest konsistente populære navne\nDenne tilgang giver et klarere billede af navnetendenser over tid ved at reducere årlige udsving og fokusere på navne, der har været populære gennem længere perioder.\n\n\nVis kode\n# Import nødvendige moduler fra baby_plots.py\nimport sys\nimport importlib\n\nsys.path.insert(1, \"src\")\nimport baby_plots\n\nimportlib.reload(baby_plots)\nfrom baby_plots import (\n    plot_name_trends_plotly,\n    load_navne_data,\n    most_popular_by_period,\n    diverging_colormap,\n)\n\nDrengenavne, Pigenavne = load_navne_data()\nperiod = 5\ntop_x = 4\npop_piger = most_popular_by_period(Pigenavne, top_x=top_x, period=period)\npop_drenge = most_popular_by_period(Drengenavne, top_x=top_x, period=period)"
+  },
+  {
+    "objectID": "plots.html#populære-drengenavne",
+    "href": "plots.html#populære-drengenavne",
+    "title": "Baby navne monitor",
+    "section": "Populære Drengenavne",
+    "text": "Populære Drengenavne\nFølgende graf viser udviklingen i de mest populære drengenavne på tværs af 5-års perioder:\n\n\n        \n        \n        \nUdvikling i populære drengenavne fra 1985-2023"
+  },
+  {
+    "objectID": "plots.html#populære-pigenavne",
+    "href": "plots.html#populære-pigenavne",
+    "title": "Baby navne monitor",
+    "section": "Populære Pigenavne",
+    "text": "Populære Pigenavne\nTilsvarende graf for de mest populære pigenavne:\n\n\n                            \n                                            \nUdvikling i populære pigenavne fra 1985-2023"
+  },
+  {
+    "objectID": "plots.html#konklusion",
+    "href": "plots.html#konklusion",
+    "title": "Baby navne monitor",
+    "section": "Konklusion",
+    "text": "Konklusion\nGraferne illustrerer tydeligt, hvordan navnetendenser ændrer sig over tid i Danmark. Nogle navne oplever kraftige stigninger og fald, mens andre har en mere stabil popularitet gennem flere perioder. Dette afspejler kulturelle tendenser, generationsskifte og påvirkning fra populærkultur på forældres navnevalg."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Baby navne monitor",
+    "section": "",
+    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites."
+  }
+]
