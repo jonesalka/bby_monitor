@@ -1,0 +1,33 @@
+author: "Jonathan Salka"
+date: today
+title: "Baby navne monitor"
+subtitle: "Udvikling i de mest populære navne fra 1985-2023"
+
+project:
+  type: website
+  output-dir: docs
+
+website:
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - about.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+    code-fold: true
+    code-summary: "Vis kode"
+    page-layout: full
+
+jupyter: python3
+
+
+
+
+
