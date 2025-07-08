@@ -7,15 +7,16 @@ project:
   type: website
   output-dir: docs
 
-website:
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+
+
 
 format:
   html:
+    # page-layout: full
+    grid: 
+      body-width: 1600px
+      sidebar-width: 600px
+      margin-width: 600px
     theme:
       - cosmo
       - brand
@@ -23,7 +24,6 @@ format:
     toc: true
     code-fold: true
     code-summary: "Vis kode"
-    page-layout: full
 
 jupyter: python3
 

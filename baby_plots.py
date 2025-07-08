@@ -12,6 +12,8 @@ from typing import Tuple
 import os
 from matplotlib.colors import to_hex
 import plotly.graph_objects as go
+import plotly.express as px
+
 
 DEA_farver = {
     "Bordeaux": "#441926",
@@ -419,6 +421,7 @@ def plot_name_trends_plotly(df, gender, highlight_names=None, colormap=None):
             font=dict(family="Arial", size=24, color="#441926", weight="bold"),
             x=0.5,
             xanchor="right",
+            yanchor="top",
         ),
         xaxis_title="År",
         yaxis_title="Antal børn",
@@ -457,3 +460,291 @@ if __name__ == "__main__":
     fig.show()
 
 # %%
+
+
+def plot_bar_race(data, top_n=10):
+
+    fig = px.bar(
+        data.query(f"Nr <= {top_n}").sort_values(by="År"),
+        x="Antal",
+        y="Navn",
+        animation_frame="År",
+        range_x=[0, data["Antal"].max()],
+        title="Navne-race gennem årene",
+    )
+    return fig
+
+
+def plot_popularity_heatmap(data, top_n=50):
+
+    # Find the top_n most popular names by their max "Antal"
+    top_names = (
+        data.groupby("Navn")["Antal"]
+        .max()
+        .sort_values(ascending=False)
+        .head(top_n)
+        .index
+    )
+    # Sort top_names by the year they were most popular
+    top_names = sorted(
+        top_names,
+        key=lambda name: data[data["Navn"] == name].loc[
+            data[data["Navn"] == name]["Antal"].idxmax(), "År"
+        ],
+    )
+    pivot_data = (
+        data[data["Navn"].isin(top_names)]
+        .pivot_table(values="Antal", index="Navn", columns="År", fill_value=None)
+        .loc[top_names]
+    )
+    fig = px.imshow(
+        pivot_data.values,
+        x=pivot_data.columns,
+        y=pivot_data.index,
+        aspect="auto",
+        title="Popularitets-heatmap",
+        labels={"x": "År", "y": "Navn", "color": "Antal børn"},
+    )
+    fig.update_xaxes(title_text="År")
+    fig.update_yaxes(title_text="Navn")
+    fig.update_layout(coloraxis_colorbar=dict(title="Antal børn"))
+    # fig.update_layout(
+    #     width=700,
+    #     height=1000,
+    #     autosize=True,
+    # )
+    return fig
+
+
+# %%
+
+
+def plot_decade_treemap(data):
+
+    decade_data = (
+        data.assign(Årti=lambda df: (df["År"] // 10) * 10)
+        .groupby(["Årti", "Navn"])["Antal"]
+        .sum()
+        .reset_index()
+    )
+    fig = px.treemap(
+        decade_data,
+        path=["Årti", "Navn"],
+        values="Antal",
+        title="Navne-fordeling per Årti",
+    )
+    return fig
+
+
+def plot_popularity_vs_consistency(data):
+
+    Pigenavne, Drengenavne = load_navne_data()
+    name_stats = (
+        data.groupby(["Navn"])
+        .agg({"Antal": ["max", "mean"], "År": ["count", "min", "max"], "Nr": "mean"})
+        .round(1)
+        .assign(
+            Køn=lambda _df: [
+                "Pige" if navn in Pigenavne["Navn"].to_list() else "Dreng"
+                for navn in _df.index
+            ],
+        )
+    )
+    # Flatten MultiIndex columns
+    name_stats.columns = ["_".join(col) for col in name_stats.columns]
+    name_stats.rename(
+        columns={
+            "Nr_mean": "Gennemsnitlig rangering",
+            "År_count": "Antal år i top 50",
+            "Antal_max": "Max antal børn døbt",
+            "Køn_": "Køn",
+        },
+        inplace=True,
+    )
+    fig = px.scatter(
+        name_stats,
+        x="Antal år i top 50",
+        y="Gennemsnitlig rangering",
+        color="Køn",
+        size="Max antal børn døbt",
+        hover_name=name_stats.index,
+        title="Popularitet vs. Konsistens",
+    )
+    return fig
+
+
+# %%
+
+# Adapted versions of your original functions for baby names data
+
+import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def prepare_data_for_bump_chart(
+    df: pd.DataFrame, min_year: int = 1985, top_n: int = None
+) -> pd.DataFrame:
+    """
+    Adapts baby names data for bump chart - modified from original function.
+
+    Args:
+        df: DataFrame with columns ['Navn', 'År', 'Nr', 'Antal']
+        min_year: Minimum year to include
+        top_n: Number of top names to include
+
+    Returns:
+        DataFrame with columns ['name', 'year', 'Rank'] suitable for bump chart
+    """
+
+    if not top_n:
+        top_n = df["Navn"].nunique()  # Default to all unique names
+
+    # Get top names by max popularity (equivalent to default_countries in original)
+    top_names = (
+        df.groupby("Navn")["Antal"]
+        .max()
+        .sort_values(ascending=False)
+        .head(top_n)
+        .index.tolist()
+    )
+
+    # Convert to format expected by bump chart function
+    return (
+        df.reset_index(drop=True)
+        .rename(columns={"Navn": "name", "År": "year", "Nr": "Rank"})
+        .loc[lambda _df: (_df["name"].isin(top_names)) & (_df["year"] >= min_year)]
+        .assign(
+            year=lambda _df: _df["year"].astype(int),
+            Rank=lambda _df: _df["Rank"].astype(int),
+        )[["name", "year", "Rank", "Antal"]]
+    )
+
+
+def create_bump_chart(
+    data: pd.DataFrame, title: str, highlighted_names: list = None
+) -> go.Figure:
+    """
+    Creates bump chart - adapted from your original function.
+
+    Args:
+        data: DataFrame with columns ['name', 'year', 'Rank']
+        title: Chart title
+        highlighted_names: List of names to highlight (replaces highlighted_countries)
+
+    Returns:
+        Plotly Figure
+    """
+
+    # Define highlighted names (replaces highlighted_countries from original)
+    if highlighted_names is None:
+        # Pick most consistently high-ranking names
+        highlighted_names = (
+            data.groupby("name")["Rank"].mean().sort_values().head(10).index.tolist()
+        )
+
+    # Create color dictionary for names (replaces country_color_dict)
+    unique_names = data["name"].unique()
+    # colors = plt.cm.Set3(np.linspace(0, 1, len(unique_names)))
+    name_color_dict = {
+        name: diverging_colormap(i / (len(unique_names) - 1))
+        for i, name in enumerate(unique_names)
+    }
+
+    # Create the figure
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add traces for each name (adapted from country loop)
+    for name in data["name"].unique():
+        name_data = data[data["name"] == name].sort_values("year")
+
+        # Set opacity based on highlighted names
+        opacity = 1.0 if name in highlighted_names else 0.2
+        r, g, b, alpha = name_color_dict[name]
+        color = f"rgba({int(r*255)}, {int(g*255)}, {int(b*255)}, {opacity})"
+
+        hovertext = name_data.apply(
+            lambda row: f"{row['year']} - {row['name']}: #{row['Rank']}", axis=1
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=name_data["year"],
+                y=name_data["Rank"],
+                mode="lines+markers",
+                name=name,
+                line=dict(width=2.5, color=color),
+                marker=dict(size=8),
+                text=hovertext,
+                hoverinfo="text",
+            ),
+        )
+
+    # Get the years and maximum rank for layout settings (same as original)
+    years = sorted(data["year"].unique())
+    max_rank = data["Rank"].max()
+    year_difference = max(years) - min(years)
+
+    # Get the first year for left-side annotations
+    first_year = years[0]
+    first_year_data = data[data["year"] == first_year].sort_values("Rank")
+
+    # Get the latest year for right-side annotations
+    last_year = years[-1]
+    last_year_data = data[data["year"] == last_year].sort_values("Rank")
+
+    # Update layout (adapted from original)
+    fig.update_layout(
+        title=title,
+        xaxis=dict(
+            title="År",
+            tickmode="array",
+            tickvals=years[::5] + [years[-1]],
+            showgrid=True,
+            gridcolor="lightgray",
+            range=[
+                min(years) - (year_difference * 0.05),
+                max(years) + (year_difference * 0.05),
+            ],
+        ),
+        yaxis=dict(
+            title=f"Ranking {first_year}",
+            range=[max_rank + 0.5, 0.5],  # Reverse the axis
+            showgrid=True,
+            gridcolor="lightgray",
+            zeroline=False,
+            tickvals=list(range(1, min(max_rank + 1, 21))),  # Limit to top 20
+            ticktext=[
+                f"{name[:15]}{'...' if len(name) > 15 else ''} : {int(rank)}"
+                for rank, name in zip(
+                    first_year_data["Rank"].head(20), first_year_data["name"].head(20)
+                )
+            ],
+        ),
+        yaxis2=dict(
+            title=f"Ranking {last_year}",
+            range=[max_rank + 0.5, 0.5],  # Reverse the axis
+            showgrid=True,
+            gridcolor="lightgray",
+            zeroline=False,
+            tickvals=list(range(1, min(max_rank + 1, 21))),
+            ticktext=[
+                f"{int(rank)} : {name[:15]}{'...' if len(name) > 15 else ''}"
+                for rank, name in zip(
+                    last_year_data["Rank"].head(20), last_year_data["name"].head(20)
+                )
+            ],
+            overlaying="y",
+            side="right",
+        ),
+        showlegend=False,
+        height=1000,
+        width=1200,
+        hovermode="closest",
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+    )
+
+    return fig

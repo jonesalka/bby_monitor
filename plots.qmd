@@ -18,27 +18,20 @@ jupyter: python3
 
 ## Introduktion
 
-Disse visualiseringer viser udviklingen i de mest populære babynavne i Danmark baseret på data fra Danmarks Statistik. Analysemetoden fokuserer på at identificere de 3 mest populære navne inden for 5-års perioder, startende fra 1985.
-
-### Dataindsamling og -behandling
-
-Data er hentet fra Danmarks Statistiks hjemmeside (dst.dk) ved hjælp af web scraping. For hver tilgængelig årgang indsamles de mest populære drenge- og pigenavne sammen med antallet af børn, der har fået disse navne.
-
-**Analysemetode:**
-- **Tidsperiode:** 1985-2023
-- **Periodeopdeling:** 5-års intervaller (f.eks. 1985-1989, 1990-1994, osv.)
-- **Udvælgelseskriterium:** De 3 mest populære navne per periode baseret på det samlede antal børn i perioden
-- **Aggregering:** Navne aggregeres på tværs af årene inden for hver periode for at identificere de mest konsistente populære navne
-
-Denne tilgang giver et klarere billede af navnetendenser over tid ved at reducere årlige udsving og fokusere på navne, der har været populære gennem længere perioder.
+Hvad er de mest populære babynavne i Danmark. Baseret på data fra Danmarks Statistik startende fra 1985.
+For hver tilgængelig årgang indsamles de 50 mest populære drenge- og pigenavne sammen med antallet af børn, der har fået hvert.
 
 ```{python}
-# | echo: true
+# | echo: false
 # | output: false
 
 # Import nødvendige moduler fra baby_plots.py
 import sys
 import importlib
+import pandas as pd
+import plotly.io as pio
+
+pio.renderers.default = "iframe"
 
 sys.path.insert(1, "src")
 import baby_plots
@@ -49,6 +42,12 @@ from baby_plots import (
     load_navne_data,
     most_popular_by_period,
     diverging_colormap,
+    plot_popularity_heatmap,
+    plot_bar_race,
+    plot_decade_treemap,
+    plot_popularity_vs_consistency,
+    prepare_data_for_bump_chart,
+    create_bump_chart,
 )
 
 Drengenavne, Pigenavne = load_navne_data()
@@ -59,34 +58,42 @@ pop_drenge = most_popular_by_period(Drengenavne, top_x=top_x, period=period)
 
 ```
 
-## Populære Drengenavne
 
-Følgende graf viser udviklingen i de mest populære drengenavne på tværs af 5-års perioder:
+Følgende graf viser udviklingen i de mest populære navne til nyfødte børn
+
+::: {.panel-tabset}
+
+# Udvikling over tid
+#### For hvert 5-års interval tages de 3 mest populære navne, og deres udvikling plottes over tid. Når de forlader top-50 stopper tidsserien.
+
+#### Navnene kan fremhæves ved at klikke på hvert navn til højre for figuren.
+## Drengenavne
 
 ```{python}
 # | echo: false
 # | fig-cap: "Udvikling i populære drengenavne fra 1985-2023"
+
 fig = plot_name_trends_plotly(
     Drengenavne,
     "Drenge",
     highlight_names=pop_drenge["Navn"].unique(),
     colormap=diverging_colormap,
 )
+
+
 fig.update_layout(
-    # width=None,  # Remove fixed width
-    # height=400,  # Keep reasonable height
+    # width=400,  # Remove fixed width
+    # height=1000,  # Keep reasonable height
     autosize=True,  # Make responsive
 )
+
 fig.show()
 ```
 
-## Populære Pigenavne
-
-Tilsvarende graf for de mest populære pigenavne:
+## Pigenavne
 
 ```{python}
 # | echo: false
-# | fig-cap: "Udvikling i populære pigenavne fra 1985-2023"
 
 fig = plot_name_trends_plotly(
     Pigenavne,
@@ -101,8 +108,152 @@ fig.update_layout(
     autosize=True,  # Make responsive
 )
 fig.show()
+
 ```
 
-## Konklusion
+# Heatmap
+#### Hvordan har de 50 mest navne udviklet sig, målt som de navne der er i top-50 ved deres mest populære år
 
-Graferne illustrerer tydeligt, hvordan navnetendenser ændrer sig over tid i Danmark. Nogle navne oplever kraftige stigninger og fald, mens andre har en mere stabil popularitet gennem flere perioder. Dette afspejler kulturelle tendenser, generationsskifte og påvirkning fra populærkultur på forældres navnevalg.
+## Drengenavne
+
+
+```{python}
+# | echo: false
+
+# Popularity heatmap
+(
+    plot_popularity_heatmap(Drengenavne, top_n=50)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+```
+
+## Pigenavne
+```{python}
+# | echo: false
+# | fig-cap: "Oversigt over top-50 mest populære navne siden 1985"
+
+## Drengenavne
+
+(
+    plot_popularity_heatmap(Pigenavne, top_n=50)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+```
+
+# Hvilke navne ligger i top-10 hvert år
+## Drengenavne
+
+```{python}
+# | echo: false
+# | fig-cap: "Top 10 navne i hvert år"
+# Bar race plot
+(
+    plot_bar_race(Drengenavne, top_n=10)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+```
+
+## Pigenavne
+```{python}
+# | echo: false
+# | fig-cap: "Top 10 navne i hvert år"
+
+# Bar race plot
+(
+    plot_bar_race(Pigenavne, top_n=10)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+
+```
+
+
+
+# Hvor meget fylder de forskellige navne hvert årti
+## Drengenavne
+```{python}
+# | echo: false
+# | fig-cap: "Hvilke navne definerer hvert årti"
+# Decade treemap
+(
+    plot_decade_treemap(Drengenavne)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+```
+
+## Pigenavne
+```{python}
+# | echo: false
+# | fig-cap: "Hvilke navne definerer hvert årti"
+# Decade treemap
+(
+    plot_decade_treemap(Pigenavne)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+```
+
+
+
+# Hvad er rangeringen af de mest populære navne over tid
+## Drengenavne
+```{python}
+# | echo: false
+# Decade treemap
+(
+    create_bump_chart(
+        prepare_data_for_bump_chart(Drengenavne), title="Bump Chart for Drengenavne"
+    )
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+```
+
+## Pigenavne
+```{python}
+# | echo: false
+(
+    create_bump_chart(
+        prepare_data_for_bump_chart(Pigenavne), title="Bump Chart for Drengenavne"
+    )
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+```
+
+:::
+
+# Hvad er sammenhængen mellem hvor populært et navn er ved dets top og hvor længe det forbliver i top-50
+```{python}
+# | echo: false
+# | fig-cap: "Sammenhæng mellem popularitet (antal navngivninger det år hvor navnet peaker) og konsistens over tid (antal år i top-50)"
+# Popularity vs consistency scatter plot
+plot_popularity_vs_consistency(pd.concat([Drengenavne, Pigenavne]))
+```
+
