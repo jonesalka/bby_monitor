@@ -119,6 +119,7 @@ fig.show()
 
 ```{python}
 # | echo: false
+# | fig-cap: "Oversigt over top-50 mest populære navne siden 1985"
 
 # Popularity heatmap
 (
@@ -182,36 +183,6 @@ fig.show()
 
 
 
-<!-- # Hvor meget fylder de forskellige navne hvert årti
-## Drengenavne
-```{python}
-# | echo: false
-# | fig-cap: "Hvilke navne definerer hvert årti"
-# Decade treemap
-(
-    plot_decade_treemap(Drengenavne)
-    .update_layout(
-        autosize=True,  # Make responsive
-    )
-    .show()
-)
-
-```
-
-## Pigenavne
-```{python}
-# | echo: false
-# | fig-cap: "Hvilke navne definerer hvert årti"
-# Decade treemap
-(
-    plot_decade_treemap(Pigenavne)
-    .update_layout(
-        autosize=True,  # Make responsive
-    )
-    .show()
-)
-
-``` -->
 
 
 
@@ -223,12 +194,18 @@ fig.show()
 (
     create_bump_chart(
         (
-            prepare_data_for_bump_chart(Drengenavne.loc[
-                Drengenavne["År"].isin(range(Drengenavne["År"].min(), Drengenavne["År"].max(), 3)
-            )])
-            .query("Rank <= 10")
-        ), 
-        title="Bump Chart for Drengenavne",
+            prepare_data_for_bump_chart(
+                Drengenavne.loc[
+                    Drengenavne["År"].isin(
+                        range(Drengenavne["År"].min(), Drengenavne["År"].max(), 3)
+                    )
+                ]
+            )
+            # .query("Rank <= 10")
+        ),
+        title="Hvilke navn ligger på 1. 2. 3... pladsen i forskellige år. De mest konsistente navne er fremhævede",
+        subtitle="awdwadaw",
+        highlight_top_names=True,
     )
     .update_layout(
         autosize=True,  # Make responsive
@@ -236,14 +213,27 @@ fig.show()
     .show()
 )
 
+
 ```
 
-<!-- ## Pigenavne
+## Pigenavne
 ```{python}
 # | echo: false
 (
     create_bump_chart(
-        prepare_data_for_bump_chart(Pigenavne), title="Bump Chart for Drengenavne"
+        (
+            prepare_data_for_bump_chart(
+                Pigenavne.loc[
+                    Pigenavne["År"].isin(
+                        range(Pigenavne["År"].min(), Drengenavne["År"].max(), 3)
+                    )
+                ]
+            )
+            # .query("Rank <= 10")
+        ),
+        title="Hvilke navn ligger på 1. 2. 3... pladsen i forskellige år. De mest konsistente navne er fremhævede",
+        subtitle="awdwadaw",
+        highlight_top_names=True,
     )
     .update_layout(
         autosize=True,  # Make responsive
@@ -251,15 +241,43 @@ fig.show()
     .show()
 )
 
-``` -->
+```
 
 :::
 
 <!-- # Hvad er sammenhængen mellem hvor populært et navn er ved dets top og hvor længe det forbliver i top-50
-```{python}
-# | echo: false
-# | fig-cap: "Sammenhæng mellem popularitet (antal navngivninger det år hvor navnet peaker) og konsistens over tid (antal år i top-50)"
+(antal år i top-50)"
 # Popularity vs consistency scatter plot
 plot_popularity_vs_consistency(pd.concat([Drengenavne, Pigenavne]))
-```
+
+# Hvor meget fylder de forskellige navne hvert årti
+## Drengenavne
+
+# | echo: false
+# | fig-cap: "Hvilke navne definerer hvert årti"
+# Decade treemap
+(
+    plot_decade_treemap(Drengenavne)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
+
+
+## Pigenavne
+# | echo: false
+# | fig-cap: "Hvilke navne definerer hvert årti"
+# Decade treemap
+(
+    plot_decade_treemap(Pigenavne)
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
+)
  -->
+
+
+
+

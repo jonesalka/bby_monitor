@@ -628,6 +628,7 @@ def prepare_data_for_bump_chart(
 def create_bump_chart(
     data: pd.DataFrame,
     title: str,
+    subtitle: str = None,
     highlight_top_names: bool = False,
 ) -> go.Figure:
     """
@@ -667,15 +668,13 @@ def create_bump_chart(
         name_data = data[data["name"] == name].sort_values("year")
 
         # Set opacity based on highlighted names
-        opacity = 1.0 if name in highlighted_names else 0.2
+        opacity = 0.8 if name in highlighted_names else 0.2
         r, g, b, alpha = name_color_dict[name]
         color = f"rgba({int(r*255)}, {int(g*255)}, {int(b*255)}, {opacity})"
 
         hovertext = name_data.apply(
             lambda row: f"{row['year']} - {row['name']}: #{row['Rank']}", axis=1
         )
-
-        print(name, hovertext)
 
         fig.add_trace(
             go.Scatter(
@@ -685,9 +684,7 @@ def create_bump_chart(
                 text=name,
                 name=name,
                 textfont=dict(size=12, color="black", family="Arial"),
-                # Add box styling
-                textbox=dict(bgcolor="white", bordercolor="black", borderwidth=1),
-                line=dict(width=2.5, color=color),
+                line=dict(width=3, color=color),
                 marker=dict(size=8),
                 hoverinfo="text",
             ),
@@ -709,10 +706,23 @@ def create_bump_chart(
     # Update layout (adapted from original)
     fig.update_layout(
         title=title,
+        annotations=[
+            dict(
+                text=subtitle if subtitle else "",
+                xref="paper",
+                yref="paper",
+                x=0.5,
+                y=0.95,  # Position relative to plot area
+                xanchor="center",
+                yanchor="top",
+                showarrow=False,
+                font=dict(size=14, color="gray"),
+            )
+        ],
         xaxis=dict(
             title="År",
             tickmode="array",
-            tickvals=years[::5] + [years[-1]],
+            tickvals=years,  # years[::5] + [years[-1]],
             showgrid=True,
             gridcolor="lightgray",
             range=[
@@ -726,11 +736,14 @@ def create_bump_chart(
             showgrid=True,
             gridcolor="lightgray",
             zeroline=False,
-            tickvals=list(range(1, min(max_rank + 1, 21))),  # Limit to top 20
+            tickvals=list(
+                range(1, max_rank)
+            ),  # min(max_rank + 1, 21))),  # Limit to top 20
             ticktext=[
                 f"{name[:15]}{'...' if len(name) > 15 else ''} : {int(rank)}"
                 for rank, name in zip(
-                    first_year_data["Rank"].head(20), first_year_data["name"].head(20)
+                    first_year_data["Rank"],  # .head(20),
+                    first_year_data["name"],  # .head(20),
                 )
             ],
         ),
@@ -744,7 +757,8 @@ def create_bump_chart(
             ticktext=[
                 f"{int(rank)} : {name[:15]}{'...' if len(name) > 15 else ''}"
                 for rank, name in zip(
-                    last_year_data["Rank"].head(20), last_year_data["name"].head(20)
+                    last_year_data["Rank"],  # head(20),
+                    last_year_data["name"],  # .head(20)
                 )
             ],
             overlaying="y",
