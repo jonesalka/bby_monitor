@@ -95,19 +95,18 @@ fig.show()
 ```{python}
 # | echo: false
 
-fig = plot_name_trends_plotly(
-    Pigenavne,
-    "Piger",
-    highlight_names=pop_piger["Navn"].unique(),
-    colormap=diverging_colormap,
+(
+    plot_name_trends_plotly(
+        Pigenavne,
+        "Piger",
+        highlight_names=pop_piger["Navn"].unique(),
+        colormap=diverging_colormap,
+    )
+    .update_layout(
+        autosize=True,  # Make responsive
+    )
+    .show()
 )
-
-fig.update_layout(
-    # width=400,  # Remove fixed width
-    # height=400,  # Keep reasonable height
-    autosize=True,  # Make responsive
-)
-fig.show()
 
 ```
 
@@ -242,40 +241,4 @@ fig.show()
 ```
 
 :::
-
-<!-- # Hvad er sammenhængen mellem hvor populært et navn er ved dets top og hvor længe det forbliver i top-50
-(antal år i top-50)"
-# Popularity vs consistency scatter plot
-plot_popularity_vs_consistency(pd.concat([Drengenavne, Pigenavne]))
-
-# Hvor meget fylder de forskellige navne hvert årti
-## Drengenavne
-
-# | echo: false
-# | fig-cap: "Hvilke navne definerer hvert årti"
-# Decade treemap
-(
-    plot_decade_treemap(Drengenavne)
-    .update_layout(
-        autosize=True,  # Make responsive
-    )
-    .show()
-)
-
-
-## Pigenavne
-# | echo: false
-# | fig-cap: "Hvilke navne definerer hvert årti"
-# Decade treemap
-(
-    plot_decade_treemap(Pigenavne)
-    .update_layout(
-        autosize=True,  # Make responsive
-    )
-    .show()
-)
- -->
-
-
-
 

@@ -773,3 +773,36 @@ def create_bump_chart(
     )
 
     return fig
+
+
+# # Hvad er sammenhængen mellem hvor populært et navn er ved dets top og hvor længe det forbliver i top-50
+# (antal år i top-50)"
+# # Popularity vs consistency scatter plot
+# plot_popularity_vs_consistency(pd.concat([Drengenavne, Pigenavne]))
+
+# # Hvor meget fylder de forskellige navne hvert årti
+# ## Drengenavne
+
+# # | echo: false
+# # | fig-cap: "Hvilke navne definerer hvert årti"
+# # Decade treemap
+# (
+#     plot_decade_treemap(Drengenavne)
+#     .update_layout(
+#         autosize=True,  # Make responsive
+#     )
+#     .show()
+# )
+
+
+# ## Pigenavne
+# # | echo: false
+# # | fig-cap: "Hvilke navne definerer hvert årti"
+# # Decade treemap
+# (
+#     plot_decade_treemap(Pigenavne)
+#     .update_layout(
+#         autosize=True,  # Make responsive
+#     )
+#     .show()
+# )
