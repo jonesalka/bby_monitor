@@ -626,7 +626,9 @@ def prepare_data_for_bump_chart(
 
 
 def create_bump_chart(
-    data: pd.DataFrame, title: str, highlighted_names: list = None
+    data: pd.DataFrame,
+    title: str,
+    highlight_top_names: bool = False,
 ) -> go.Figure:
     """
     Creates bump chart - adapted from your original function.
@@ -641,11 +643,13 @@ def create_bump_chart(
     """
 
     # Define highlighted names (replaces highlighted_countries from original)
-    if highlighted_names is None:
+    if highlight_top_names:
         # Pick most consistently high-ranking names
         highlighted_names = (
             data.groupby("name")["Rank"].mean().sort_values().head(10).index.tolist()
         )
+    else:
+        highlighted_names = data["name"].unique()
 
     # Create color dictionary for names (replaces country_color_dict)
     unique_names = data["name"].unique()
@@ -671,15 +675,20 @@ def create_bump_chart(
             lambda row: f"{row['year']} - {row['name']}: #{row['Rank']}", axis=1
         )
 
+        print(name, hovertext)
+
         fig.add_trace(
             go.Scatter(
                 x=name_data["year"],
                 y=name_data["Rank"],
-                mode="lines+markers",
+                mode="lines+text",
+                text=name,
                 name=name,
+                textfont=dict(size=12, color="black", family="Arial"),
+                # Add box styling
+                textbox=dict(bgcolor="white", bordercolor="black", borderwidth=1),
                 line=dict(width=2.5, color=color),
                 marker=dict(size=8),
-                text=hovertext,
                 hoverinfo="text",
             ),
         )

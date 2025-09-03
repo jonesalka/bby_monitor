@@ -182,7 +182,7 @@ fig.show()
 
 
 
-# Hvor meget fylder de forskellige navne hvert årti
+<!-- # Hvor meget fylder de forskellige navne hvert årti
 ## Drengenavne
 ```{python}
 # | echo: false
@@ -211,7 +211,7 @@ fig.show()
     .show()
 )
 
-```
+``` -->
 
 
 
@@ -222,7 +222,13 @@ fig.show()
 # Decade treemap
 (
     create_bump_chart(
-        prepare_data_for_bump_chart(Drengenavne), title="Bump Chart for Drengenavne"
+        (
+            prepare_data_for_bump_chart(Drengenavne.loc[
+                Drengenavne["År"].isin(range(Drengenavne["År"].min(), Drengenavne["År"].max(), 3)
+            )])
+            .query("Rank <= 10")
+        ), 
+        title="Bump Chart for Drengenavne",
     )
     .update_layout(
         autosize=True,  # Make responsive
@@ -232,7 +238,7 @@ fig.show()
 
 ```
 
-## Pigenavne
+<!-- ## Pigenavne
 ```{python}
 # | echo: false
 (
@@ -245,15 +251,15 @@ fig.show()
     .show()
 )
 
-```
+``` -->
 
 :::
 
-# Hvad er sammenhængen mellem hvor populært et navn er ved dets top og hvor længe det forbliver i top-50
+<!-- # Hvad er sammenhængen mellem hvor populært et navn er ved dets top og hvor længe det forbliver i top-50
 ```{python}
 # | echo: false
 # | fig-cap: "Sammenhæng mellem popularitet (antal navngivninger det år hvor navnet peaker) og konsistens over tid (antal år i top-50)"
 # Popularity vs consistency scatter plot
 plot_popularity_vs_consistency(pd.concat([Drengenavne, Pigenavne]))
 ```
-
+ -->
