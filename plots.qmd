@@ -19,7 +19,7 @@ jupyter: python3
 ## Introduktion
 
 Hvad er de mest populære babynavne i Danmark. Baseret på data fra Danmarks Statistik startende fra 1985.
-For hver tilgængelig årgang indsamles de 50 mest populære drenge- og pigenavne sammen med antallet af børn, der har fået hvert.
+For hver tilgængelig årgang indsamles de 50 mest populære drenge- og pigenavne sammen med antallet af børn, der har fået hvert navn.
 
 ```{python}
 # | echo: false
@@ -64,7 +64,7 @@ Følgende graf viser udviklingen i de mest populære navne til nyfødte børn
 ::: {.panel-tabset}
 
 # Udvikling over tid
-#### For hvert 5-års interval tages de 3 mest populære navne, og deres udvikling plottes over tid. Når de forlader top-50 stopper tidsserien.
+#### Figuren viser de mest populære navne til nyfødte og deres varighed. For hvert 5-års interval tages de 3 mest populære navne, og deres udvikling plottes over tid. Når de forlader top-50 stopper tidsserien.
 
 #### Navnene kan fremhæves ved at klikke på hvert navn til højre for figuren.
 ## Drengenavne
@@ -148,7 +148,7 @@ fig.show()
 )
 ```
 
-# Hvilke navne ligger i top-10 hvert år
+# Hvilke navne ligger i top-10 i forskellige år. Træk i tidslinjen nederst for at følge udviklingen.
 ## Drengenavne
 
 ```{python}
@@ -184,9 +184,7 @@ fig.show()
 
 
 
-
-
-# Hvad er rangeringen af de mest populære navne over tid
+# Hvad er rangeringen af de mest populære navne over tid. De mest konsistente navne er fremhævede.
 ## Drengenavne
 ```{python}
 # | echo: false
@@ -203,7 +201,7 @@ fig.show()
             )
             # .query("Rank <= 10")
         ),
-        title="Hvilke navn ligger på 1. 2. 3... pladsen i forskellige år. De mest konsistente navne er fremhævede",
+        title="Hvilke navn ligger på 1. 2. 3... pladsen i forskellige år",
         subtitle="awdwadaw",
         highlight_top_names=True,
     )
